@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
         if diode_position == "USE_CURRENT":
             diode_position = placer.get_diode_position("SW{}", "D{}", True)
-        elif diode_position == "NONE" or diode_position == "SKIP":
+        elif diode_position in ["NONE", "SKIP"]:
             diode_position = None
         elif diode_position is not None:
             x, y, orientation, side = diode_position.split(",")
