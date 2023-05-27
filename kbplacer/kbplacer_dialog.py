@@ -115,8 +115,7 @@ class KbplacerDialog(wx.Dialog):
         self.__template_file_picker = template_file_picker
 
     def OnDiodePlaceCheckbox(self, event):
-        is_checked = event.GetEventObject().IsChecked()
-        if is_checked:
+        if is_checked := event.GetEventObject().IsChecked():
             self.__diode_annotation_format.Enable()
             self.__use_first_pair_as_template_checkbox.Enable()
         else:

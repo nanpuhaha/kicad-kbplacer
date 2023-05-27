@@ -14,8 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 def run_kbplacer_process(tmpdir, route, diode_position, workdir, package_name):
-    layout_file = "{}/kle-internal.json".format(tmpdir)
-    pcb_path = "{}/keyboard-before.kicad_pcb".format(tmpdir)
+    layout_file = f"{tmpdir}/kle-internal.json"
+    pcb_path = f"{tmpdir}/keyboard-before.kicad_pcb"
 
     kbplacer_args = [
         "python3",
@@ -57,8 +57,8 @@ def assert_group(expected: ET.ElementTree, actual: ET.ElementTree):
             logger.info(d)
         assert False, "Difference probably found"
 
-    if edit_script and not all(
-        [type(node) == actions.MoveNode for node in edit_script]
+    if edit_script and any(
+        type(node) != actions.MoveNode for node in edit_script
     ):
         logger.info("Difference found")
         diff = difflib.unified_diff(expected.splitlines(), actual.splitlines())
@@ -75,7 +75,7 @@ def assert_group(expected: ET.ElementTree, actual: ET.ElementTree):
                 logger.info("'textLength' attribute is allowed to be different")
                 differences.remove(node)
 
-        assert len(differences) == 0, "Not allowd differences found"
+        assert not differences, "Not allowd differences found"
     else:
         logger.info("No differences found")
 
@@ -122,9 +122,9 @@ def test_with_examples(
 ):
     test_dir = request.fspath.dirname
 
-    source_dir = "{}/../examples/{}".format(test_dir, example)
-    shutil.copy("{}/keyboard-before.kicad_pcb".format(source_dir), tmpdir)
-    shutil.copy("{}/kle-internal.json".format(source_dir), tmpdir)
+    source_dir = f"{test_dir}/../examples/{example}"
+    shutil.copy(f"{source_dir}/keyboard-before.kicad_pcb", tmpdir)
+    shutil.copy(f"{source_dir}/kle-internal.json", tmpdir)
 
     run_kbplacer_process(tmpdir, route, diode_position, workdir, package_name)
 
