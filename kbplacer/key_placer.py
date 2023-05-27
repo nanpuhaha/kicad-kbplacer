@@ -16,6 +16,19 @@ class DiodePosition:
     orientation: float
     side: Side
 
+@dataclass
+class Spacing:
+    x: float
+    y: float
+    
+    @classmethod
+    def load_from_kle(cls, kle: dict):
+        x = kle['spacing']
+        return cls(x=kle['spacing']['x'], y=kle['spacing']['y'])
+
+ChocSpacing = Spacing(18, 17)
+MXSpacing = Spacing(19.05, 19.05)
+CfxSpacing = Spacing(17.05, 17.05)
 
 def position_in_rotated_coordinates(
     point: pcbnew.wxPoint, angle: float
@@ -60,7 +73,7 @@ def position_in_cartesian_coordinates(
 
 class KeyPlacer(BoardModifier):
     def __init__(
-        self, logger: Logger, board: pcbnew.BOARD, layout, key_distance: float = 19.05
+        self, logger: Logger, board: pcbnew.BOARD, layout, key_spacing: Spacing = MXSpacing
     ) -> None:
         super().__init__(logger, board)
         self.__layout = layout
